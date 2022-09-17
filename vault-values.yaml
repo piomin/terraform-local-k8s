@@ -1,0 +1,9 @@
+server:
+  dev:
+    enabled: true
+  route:
+    enabled: true
+    host: ""
+    tls: null
+global:
+  openshift: true
