@@ -189,3 +189,18 @@ resource "helm_release" "vault" {
     file("vault-values.yaml")
   ]
 }
+
+resource "helm_release" "argocd-apps" {
+  name  = "argocd-apps"
+
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argocd-apps"
+  namespace        = "openshift-gitops"
+  version          = "0.0.1"
+
+  values = [
+    file("apps.yaml")
+  ]
+
+  depends_on = [kubernetes_manifest.gitops]
+}
