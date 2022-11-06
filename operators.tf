@@ -215,12 +215,12 @@ resource "helm_release" "argocd-apps" {
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argocd-apps"
   namespace        = "openshift-gitops"
-  version          = "0.0.1"
+  version          = "0.0.3"
 
   values = [
     file("apps.yaml")
   ]
 
-  depends_on = [kubernetes_manifest.gitops, helm_release.vault, helm_release.sealed-secrets]
+  depends_on = [kubernetes_manifest.gitops, kubernetes_cluster_role_binding.argocd-application-controller-crb]
 
 }
