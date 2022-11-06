@@ -221,5 +221,6 @@ resource "helm_release" "argocd-apps" {
     file("apps.yaml")
   ]
 
-  depends_on = [kubernetes_manifest.gitops]
+  depends_on = [kubernetes_manifest.gitops, helm_release.vault, helm_release.sealed-secrets]
+
 }

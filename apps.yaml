@@ -30,3 +30,7 @@ applications:
         recurse: true
     destination:
       server: https://kubernetes.default.svc
+      namespace: external-secrets
+    syncPolicy:
+      syncOptions:
+        - CreateNamespace=true
