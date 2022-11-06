@@ -34,6 +34,25 @@ resource "kubernetes_manifest" "pipelines" {
   }
 }
 
+resource "kubernetes_manifest" "external-secrets" {
+  manifest = {
+    "apiVersion" = "operators.coreos.com/v1alpha1"
+    "kind"       = "Subscription"
+    "metadata" = {
+      "name"      = "external-secrets-operator"
+      "namespace" = "openshift-operators"
+    }
+    "spec" = {
+      "channel"             = "alpha"
+      "installPlanApproval" = "Automatic"
+      "name"                = "external-secrets-operator"
+      "source"              = "community-operators"
+      "sourceNamespace"     = "openshift-marketplace"
+      "startingCSV"         = "external-secrets-operator.v0.6.1"
+    }
+  }
+}
+
 resource "kubernetes_namespace" "resource-locker-ns" {
   metadata {
     name = "resource-locker-operator"
