@@ -209,18 +209,24 @@ resource "helm_release" "vault" {
   ]
 }
 
-resource "helm_release" "argocd-apps" {
-  name  = "argocd-apps"
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [kubernetes_manifest.gitops]
 
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argocd-apps"
-  namespace        = "openshift-gitops"
-  version          = "0.0.3"
+  create_duration = "30s"
+}
+
+resource "helm_release" "argocd-apps" {
+  name = "argocd-apps"
+
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-apps"
+  namespace  = "openshift-gitops"
+  version    = "0.0.3"
 
   values = [
     file("apps.yaml")
   ]
 
-  depends_on = [kubernetes_manifest.gitops, kubernetes_cluster_role_binding.argocd-application-controller-crb]
+  depends_on       = [time_sleep.wait_30_seconds]
 
 }
