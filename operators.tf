@@ -162,7 +162,8 @@ resource "kubernetes_manifest" "cluster-admins-group" {
       "name" = "cluster-admins"
     }
     "users" = [
-      "opentlc-mgr"
+      "opentlc-mgr",
+      "admin"
     ]
   }
 }
@@ -209,10 +210,10 @@ resource "helm_release" "vault" {
   ]
 }
 
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_60_seconds" {
   depends_on = [kubernetes_manifest.gitops]
 
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 resource "helm_release" "argocd-apps" {
@@ -227,6 +228,6 @@ resource "helm_release" "argocd-apps" {
     file("apps.yaml")
   ]
 
-  depends_on       = [time_sleep.wait_30_seconds]
+  depends_on       = [time_sleep.wait_60_seconds]
 
 }
