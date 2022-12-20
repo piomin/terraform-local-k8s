@@ -184,6 +184,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: quarkus-person-app-vs
+  namespace: demo-apps
 spec:
   hosts:
     - quarkus-person-app

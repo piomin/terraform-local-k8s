@@ -1,7 +1,6 @@
 auth:
   username: person-db
   database: person-db
-  password: person-db
   existingSecret: person-db
 
 fullnameOverride: person-db
