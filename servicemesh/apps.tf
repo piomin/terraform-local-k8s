@@ -57,10 +57,13 @@ resource "helm_release" "insurance-db" {
 }
 
 resource "kubernetes_deployment" "quarkus-insurance-app" {
-  depends_on = [helm_release.insurance-db]
+  depends_on = [helm_release.insurance-db, time_sleep.wait_60_seconds_2]
   metadata {
     name      = "quarkus-insurance-app"
     namespace = "demo-apps"
+    annotations = {
+      "sidecar.istio.io/inject": "true"
+    }
   }
   spec {
     selector {
@@ -120,7 +123,7 @@ resource "kubernetes_deployment" "quarkus-insurance-app" {
 }
 
 resource "kubernetes_service" "quarkus-insurance-app" {
-  depends_on = [helm_release.insurance-db]
+  depends_on = [helm_release.insurance-db, time_sleep.wait_60_seconds_2]
   metadata {
     name = "quarkus-insurance-app"
     namespace = "demo-apps"
@@ -141,10 +144,13 @@ resource "kubernetes_service" "quarkus-insurance-app" {
 }
 
 resource "kubernetes_deployment" "quarkus-person-app-v1" {
-  depends_on = [helm_release.person-db]
+  depends_on = [helm_release.person-db, time_sleep.wait_60_seconds_2]
   metadata {
     name      = "quarkus-person-app-v1"
     namespace = "demo-apps"
+    annotations = {
+      "sidecar.istio.io/inject": "true"
+    }
   }
   spec {
     selector {
@@ -204,10 +210,13 @@ resource "kubernetes_deployment" "quarkus-person-app-v1" {
 }
 
 resource "kubernetes_deployment" "quarkus-person-app-v2" {
-  depends_on = [helm_release.person-db]
+  depends_on = [helm_release.person-db, time_sleep.wait_60_seconds_2]
   metadata {
     name      = "quarkus-person-app-v2"
     namespace = "demo-apps"
+    annotations = {
+      "sidecar.istio.io/inject": "true"
+    }
   }
   spec {
     selector {
@@ -267,7 +276,7 @@ resource "kubernetes_deployment" "quarkus-person-app-v2" {
 }
 
 resource "kubernetes_service" "quarkus-person-app" {
-  depends_on = [helm_release.person-db]
+  depends_on = [helm_release.person-db, time_sleep.wait_60_seconds_2]
   metadata {
     name = "quarkus-person-app"
     namespace = "demo-apps"
