@@ -1,8 +1,8 @@
-global.postgresql.auth:
+auth:
   username: insurance-db
   database: insurance-db
   password: insurance-db
-  existingSecret: person-db
+  existingSecret: insurance-db
 
 fullnameOverride: insurance-db
 
@@ -21,6 +21,10 @@ fullnameOverride: insurance-db
 #  enabled: false
 
 primary:
+  podSecurityContext:
+    fsGroup: null
+    seccompProfile:
+      type: RuntimeDefault
   securityContext:
     enabled: false
   containerSecurityContext:

@@ -1,4 +1,4 @@
-global.postgresql.auth:
+auth:
   username: person-db
   database: person-db
   password: person-db
@@ -25,6 +25,10 @@ fullnameOverride: person-db
 #  enabled: false
 
 primary:
+  podSecurityContext:
+    fsGroup: null
+    seccompProfile:
+      type: RuntimeDefault
   securityContext:
     enabled: false
   containerSecurityContext:

@@ -11,10 +11,10 @@ resource "kubernetes_secret" "person-db-secret" {
     namespace = "demo-apps"
   }
   data = {
-    postgres-password = "person-db"
-    password          = "person-db"
+    postgres-password = "123456"
+    password          = "123456"
     database-user     = "person-db"
-    database-name     = "person-name"
+    database-name     = "person-db"
   }
 }
 
@@ -25,10 +25,10 @@ resource "kubernetes_secret" "insurance-db-secret" {
     namespace = "demo-apps"
   }
   data = {
-    postgres-password = "insurance-db"
-    password          = "insurance-db"
+    postgres-password = "123456"
+    password          = "123456"
     database-user     = "insurance-db"
-    database-name     = "insurance-name"
+    database-name     = "insurance-db"
   }
 }
 
