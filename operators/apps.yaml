@@ -1,0 +1,10 @@
+applications:
+  - name: global-config
+    namespace: openshift-gitops
+    project: default
+    source:
+      repoURL: https://github.com/piomin/openshift-cluster-config.git
+      targetRevision: HEAD
+      path: global
+    destination:
+      server: https://kubernetes.default.svc
