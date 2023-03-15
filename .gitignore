@@ -1,2 +1,3 @@
 /servicemesh/variables.tf
 /operators/variables.tf
+/vault-ocp/variables.tf
