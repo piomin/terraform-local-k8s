@@ -1,3 +1,6 @@
 /servicemesh/variables.tf
 /operators/variables.tf
 /vault-ocp/variables.tf
+/vault-ocp/vault-provider-csi/variables.tf
+/vault-ocp/vault-provider-csi/variables.tf
+/vault-ocp/vault-provider-sb/variables.tf
