@@ -1,8 +1,3 @@
-#provider "vault" {
-#  token = "root"
-#  address = var.vault-addr
-#}
-
 provider "kubernetes" {
   config_path = "~/.kube/config"
   config_context = var.cluster-context
@@ -69,11 +64,4 @@ resource "helm_release" "vault" {
   values = [
     file("values.yaml")
   ]
-}
-
-resource "kubernetes_service_account" "webapp-sa" {
-  metadata {
-    name      = "webapp-sa"
-    namespace = "default"
-  }
 }

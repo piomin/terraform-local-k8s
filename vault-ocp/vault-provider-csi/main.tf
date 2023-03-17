@@ -53,6 +53,13 @@ path "secret/data/db-pass" {
 EOT
 }
 
+resource "kubernetes_service_account" "webapp-sa" {
+  metadata {
+    name      = "webapp-sa"
+    namespace = "default"
+  }
+}
+
 resource "vault_kubernetes_auth_backend_role" "internal-role" {
   backend                          = vault_auth_backend.kubernetes.path
   role_name                        = "webapp"
@@ -60,13 +67,6 @@ resource "vault_kubernetes_auth_backend_role" "internal-role" {
   bound_service_account_namespaces = ["default"]
   token_ttl                        = 3600
   token_policies                   = ["internal-app"]
-}
-
-resource "kubernetes_service_account" "webapp-sa" {
-  metadata {
-    name      = "webapp-sa"
-    namespace = "default"
-  }
 }
 
 resource "kubernetes_manifest" "vault-database" {
