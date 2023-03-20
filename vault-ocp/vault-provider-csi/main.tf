@@ -22,16 +22,9 @@ resource "vault_kv_secret_v2" "secret" {
   )
 }
 
-data "kubernetes_service_account" "vault-sa" {
+data "kubernetes_secret" "vault-token" {
   metadata {
-    name      = "vault"
-    namespace = "vault"
-  }
-}
-
-data "kubernetes_secret" "vault-default" {
-  metadata {
-    name      = data.kubernetes_service_account.vault-sa.default_secret_name
+    name      = "vault-token"
     namespace = "vault"
   }
 }
@@ -39,8 +32,8 @@ data "kubernetes_secret" "vault-default" {
 resource "vault_kubernetes_auth_backend_config" "example" {
   backend                = vault_auth_backend.kubernetes.path
   kubernetes_host        = "https://172.30.0.1:443"
-  kubernetes_ca_cert     = data.kubernetes_secret.vault-default.data["ca.crt"]
-  token_reviewer_jwt     = data.kubernetes_secret.vault-default.data.token
+  kubernetes_ca_cert     = data.kubernetes_secret.vault-token.data["ca.crt"]
+  token_reviewer_jwt     = data.kubernetes_secret.vault-token.data.token
 }
 
 resource "vault_policy" "internal-app" {

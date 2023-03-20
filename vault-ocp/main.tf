@@ -10,6 +10,33 @@ provider "helm" {
   }
 }
 
+resource "kubernetes_namespace" "vault" {
+  metadata {
+    name = "vault"
+  }
+}
+
+resource "kubernetes_service_account" "vault-sa" {
+  depends_on = [kubernetes_namespace.vault]
+  metadata {
+    name      = "vault"
+    namespace = "vault"
+  }
+}
+
+resource "kubernetes_secret_v1" "vault-secret" {
+  depends_on = [kubernetes_namespace.vault]
+  metadata {
+    name = "vault-token"
+    namespace = "vault"
+    annotations = {
+      "kubernetes.io/service-account.name" = "vault"
+    }
+  }
+
+  type = "kubernetes.io/service-account-token"
+}
+
 resource "kubernetes_cluster_role_binding" "privileged" {
   metadata {
     name = "system:openshift:scc:privileged"
@@ -58,7 +85,6 @@ resource "helm_release" "vault" {
   chart            = "vault"
   name             = "vault"
   namespace        = "vault"
-  create_namespace = true
   repository       = "https://helm.releases.hashicorp.com"
 
   values = [

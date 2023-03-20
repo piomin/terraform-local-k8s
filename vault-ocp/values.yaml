@@ -8,6 +8,9 @@ server:
   image:
     repository: "registry.connect.redhat.com/hashicorp/vault"
     tag: "1.12.4-ubi"
+  serviceAccount:
+    name: vault
+    create: false
 global:
   openshift: true
 csi:
