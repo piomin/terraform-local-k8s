@@ -1,3 +1,17 @@
+resource "kubernetes_manifest" "tracing-group" {
+  manifest = {
+    "apiVersion" = "operators.coreos.com/v1"
+    "kind"       = "OperatorGroup"
+    "metadata"   = {
+      "name"      = "openshift-distributed-tracing"
+      "namespace" = "openshift-distributed-tracing"
+    }
+    "spec" = {
+      "upgradeStrategy" = "Default"
+    }
+  }
+}
+
 resource "kubernetes_manifest" "tracing" {
   manifest = {
     "apiVersion" = "operators.coreos.com/v1alpha1"
