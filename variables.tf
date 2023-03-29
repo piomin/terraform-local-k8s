@@ -1,4 +1,4 @@
 variable "cluster-context" {
   type    = string
-  default = "default/api-yf9088ei-eastus-aroapp-io:6443/kube:admin"
+  default = "default/api-cluster-dzgkp-dzgkp-sandbox1982-opentlc-com:6443/opentlc-mgr"
 }

@@ -48,25 +48,24 @@ resource "kubernetes_manifest" "external-secrets" {
       "name"                = "external-secrets-operator"
       "source"              = "community-operators"
       "sourceNamespace"     = "openshift-marketplace"
-      "startingCSV"         = "external-secrets-operator.v0.6.1"
     }
   }
 }
 
-resource "kubernetes_namespace" "resource-locker-ns" {
+resource "kubernetes_namespace" "patch-ns" {
   metadata {
-    name = "resource-locker-operator"
+    name = "patch-operator"
   }
 }
 
-resource "kubernetes_manifest" "resource-locker-group" {
-  depends_on = [kubernetes_namespace.resource-locker-ns]
+resource "kubernetes_manifest" "patch-group" {
+  depends_on = [kubernetes_namespace.patch-ns]
   manifest = {
     "apiVersion" = "operators.coreos.com/v1"
     "kind"       = "OperatorGroup"
     "metadata" = {
-      "name"      = "resource-locker-operator-1"
-      "namespace" = "resource-locker-operator"
+      "name"      = "patch-operator-1"
+      "namespace" = "patch-operator"
     }
     "spec" = {
 
@@ -75,18 +74,18 @@ resource "kubernetes_manifest" "resource-locker-group" {
 }
 
 resource "kubernetes_manifest" "resource-locker" {
-  depends_on = [kubernetes_namespace.resource-locker-ns, kubernetes_manifest.resource-locker-group]
+  depends_on = [kubernetes_namespace.patch-ns, kubernetes_manifest.patch-group]
   manifest = {
     "apiVersion" = "operators.coreos.com/v1alpha1"
     "kind"       = "Subscription"
     "metadata" = {
-      "name"      = "resource-locker-operator"
-      "namespace" = "resource-locker-operator"
+      "name"      = "patch-operator"
+      "namespace" = "patch-operator"
     }
     "spec" = {
       "channel"             = "alpha"
       "installPlanApproval" = "Automatic"
-      "name"                = "resource-locker-operator"
+      "name"                = "patch-operator"
       "source"              = "community-operators"
       "sourceNamespace"     = "openshift-marketplace"
     }
@@ -208,6 +207,19 @@ resource "helm_release" "vault" {
   values = [
     file("vault-values.yaml")
   ]
+}
+
+resource "kubernetes_secret_v1" "vault-secret" {
+  depends_on = [helm_release.vault]
+  metadata {
+    name = "vault-token"
+    namespace = "vault"
+    annotations = {
+      "kubernetes.io/service-account.name" = "vault"
+    }
+  }
+
+  type = "kubernetes.io/service-account-token"
 }
 
 resource "time_sleep" "wait_60_seconds" {
