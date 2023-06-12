@@ -91,3 +91,17 @@ resource "kubernetes_cluster_role_binding" "argocd-application-controller-crb" {
 
   depends_on = [time_sleep.wait_120_seconds]
 }
+
+resource "kubernetes_manifest" "cluster-admins-group" {
+  manifest = {
+    "apiVersion" = "user.openshift.io/v1"
+    "kind"       = "Group"
+    "metadata"   = {
+      "name" = "cluster-admins"
+    }
+    "users" = [
+      "opentlc-mgr",
+      "admin"
+    ]
+  }
+}
