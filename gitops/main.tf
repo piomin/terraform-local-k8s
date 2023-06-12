@@ -73,40 +73,7 @@ resource "helm_release" "argocd-apps" {
   depends_on = [time_sleep.wait_120_seconds]
 }
 
-// (6) Create `cluster-admins` group
-resource "kubernetes_manifest" "cluster-admins-group" {
-  manifest = {
-    "apiVersion" = "user.openshift.io/v1"
-    "kind"       = "Group"
-    "metadata"   = {
-      "name" = "cluster-admins"
-    }
-    "users" = [
-      "opentlc-mgr",
-      "admin"
-    ]
-  }
-
-  depends_on = [time_sleep.wait_120_seconds]
-}
-
-// (7) Create `app-owners` group
-resource "kubernetes_manifest" "app-owners" {
-  manifest = {
-    "apiVersion" = "user.openshift.io/v1"
-    "kind"       = "Group"
-    "metadata"   = {
-      "name" = "app-owners"
-    }
-    "users" = [
-      "pminkows"
-    ]
-  }
-
-  depends_on = [time_sleep.wait_120_seconds]
-}
-
-// (8) Add cluster privileges to ArgoCD account
+// (6) Add cluster privileges to ArgoCD account
 resource "kubernetes_cluster_role_binding" "argocd-application-controller-crb" {
   metadata {
     name = "argocd-application-controller-cluster-admin"

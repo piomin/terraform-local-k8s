@@ -1,11 +1,17 @@
+projects:
+  - name: acm
+    namespace: openshift-gitops
 applications:
-  - name: cluster-config
+  - name: local-cluster-config
     namespace: openshift-gitops
     project: default
     source:
       repoURL: https://github.com/piomin/openshift-cluster-config.git
       targetRevision: HEAD
-      path: manifests
+      path: clusters
+      helm:
+        valueFiles:
+          - values-local.yaml
     destination:
       server: https://kubernetes.default.svc
   - name: cicd-config
@@ -19,18 +25,12 @@ applications:
         recurse: true
     destination:
       server: https://kubernetes.default.svc
-  - name: external-secrets-config
+  - name: multi-cluster-config
     namespace: openshift-gitops
-    project: default
+    project: acm
     source:
       repoURL: https://github.com/piomin/openshift-cluster-config.git
       targetRevision: HEAD
-      path: external-secrets
-      directory:
-        recurse: true
+      path: multicluster
     destination:
       server: https://kubernetes.default.svc
-      namespace: external-secrets
-    syncPolicy:
-      syncOptions:
-        - CreateNamespace=true
