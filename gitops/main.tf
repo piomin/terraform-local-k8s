@@ -104,4 +104,6 @@ resource "kubernetes_manifest" "cluster-admins-group" {
       "admin"
     ]
   }
+
+  depends_on = [time_sleep.wait_120_seconds]
 }
